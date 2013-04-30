@@ -5,7 +5,7 @@ class WebshotTest < Test::Unit::TestCase
   DATA_DIR = File.expand_path(File.dirname(__FILE__) + "/data")
 
   def setup
-    Webshot.setup!
+    Webshot.capybara_setup!
     @webshot = Webshot::Screenshot.new
   end
 
