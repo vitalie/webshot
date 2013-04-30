@@ -1,24 +1,43 @@
-require "webshot/version"
+require "mini_magick"
+require "capybara/dsl"
+require "capybara/poltergeist"
 require "active_support/core_ext"
+require "webshot/version"
+require "webshot/errors"
+require "webshot/screenshot"
 
 module Webshot
-  # Thumbnail width
+
+  ## Browser settings
+  # Width
   mattr_accessor :width
-  @@width = 120
+  @@width = 1024
 
-  # Thumbnail height
+  # Height
   mattr_accessor :height
-  @@height = 90
+  @@height = 768
 
-  # Gravity
-  mattr_accessor :gravity
-  @@gravity = "north"
-
-  # Default quality for thumbnails
-  mattr_accessor :quality
-  @@quality = 85
+  # User agent
+  mattr_accessor :user_agent
+  @@user_agent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.43 Safari/537.31"
 
   def self.setup
     yield self
+  end
+
+  def self.setup!
+    # By default Capybara will try to boot a rack application
+    # automatically. You might want to switch off Capybara's
+    # rack server if you are running against a remote application
+    Capybara.run_server = false
+    Capybara.register_driver :poltergeist do |app|
+      Capybara::Poltergeist::Driver.new(app, {
+        # Raise JavaScript errors to Ruby
+        js_errors: false,
+        # Additional command line options for PhantomJS
+        phantomjs_options: ['--ignore-ssl-errors=yes'],
+      })
+    end
+    Capybara.current_driver = :poltergeist
   end
 end
