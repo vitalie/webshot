@@ -46,12 +46,13 @@ class WebshotTest < Test::Unit::TestCase
         File.delete output if File.exists? output
 
         # Customize MiniMagick options
-        @webshot.capture("http://#{name}/", output) do |thumb|
+        result = @webshot.capture("http://#{name}/", output) do |thumb|
           thumb.combine_options do |c|
             c.thumbnail "100x90"
           end
         end
         assert File.exists? output
+        assert result.respond_to? :to_blob
       end
     end
   end

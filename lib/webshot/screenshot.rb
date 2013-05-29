@@ -50,6 +50,7 @@ module Webshot
 
         # Save thumbnail
         thumb.write path
+        thumb
       else
         raise WebshotError.new("Could not fetch page: #{url.inspect}, error code: #{page.driver.status_code}")
       end
