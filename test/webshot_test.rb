@@ -11,7 +11,7 @@ class WebshotTest < Test::Unit::TestCase
 
   def test_http
     assert_nothing_raised do
-      %w(www.google.com www.yahoo.com).each do |name|
+      %w(www.yahoo.com).each do |name|
         output = thumb(name)
         File.delete output if File.exists? output
         @webshot.capture "http://#{name}/", output
@@ -31,10 +31,27 @@ class WebshotTest < Test::Unit::TestCase
     end
   end
 
-  def test_
-    %w(888.888.888.888).each do |name|
+  def test_invalid_url
+    %w(nxdomain).each do |name|
       assert_raise Webshot::WebshotError do
         @webshot.capture "http://#{name}/", thumb(name)
+      end
+    end
+  end
+
+  def test_mini_magick
+    assert_nothing_raised do
+      %w(www.yahoo.com).each do |name|
+        output = thumb(name)
+        File.delete output if File.exists? output
+
+        # Customize MiniMagick options
+        @webshot.capture("http://#{name}/", output) do |thumb|
+          thumb.combine_options do |c|
+            c.thumbnail "100x90"
+          end
+        end
+        assert File.exists? output
       end
     end
   end
