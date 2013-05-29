@@ -21,12 +21,25 @@ Or install it yourself as:
 
     # Setup Capybara
     Webshot.capybara_setup!
-
     webshot = Webshot::Screenshot.new
+
+    # Capture Google's home page
     webshot.capture "http://www.google.com/", "google.png"
 
-    # Customize output (MiniMagick settings)
+    # Customize thumbnail
     webshot.capture "http://www.google.com/", "google.png", width: 100, height: 90, quality: 85
+
+    # Customize thumbnail generation (MiniMagick)
+    # see: https://github.com/minimagick/minimagick
+    webshot.capture("http://www.google.com/", "google.png") do |magick|
+      magick.combine_options do |c|
+        c.thumbnail "100x"
+        c.background "white"
+        c.extent "100x90"
+        c.gravity "north"
+        c.quality 85
+      end
+    end
 
 ## Contributing
 
