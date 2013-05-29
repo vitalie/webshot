@@ -22,21 +22,30 @@ module Webshot
       gravity = opts.fetch(:gravity, "north")
       quality = opts.fetch(:quality, 85)
 
+      # Reset session before visiting url
+      Capybara.reset_sessions!
+
       # Open page
       visit url
 
+      # Check response code
       if page.driver.status_code == 200
-        # Save screenshot
+        # Save screenshot to file
         page.driver.save_screenshot(path, :full => true)
 
         # Resize screenshot
         thumb = MiniMagick::Image.open(path)
-        thumb.combine_options do |c|
-          c.thumbnail "#{width}x"
-          c.background "white"
-          c.extent "#{width}x#{height}"
-          c.gravity gravity
-          c.quality quality
+        if block_given?
+          # Customize MiniMagick options
+          yield thumb
+        else
+          thumb.combine_options do |c|
+            c.thumbnail "#{width}x"
+            c.background "white"
+            c.extent "#{width}x#{height}"
+            c.gravity gravity
+            c.quality quality
+          end
         end
 
         # Save thumbnail
