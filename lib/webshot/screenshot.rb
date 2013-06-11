@@ -62,6 +62,7 @@ module Webshot
           raise WebshotError.new("Could not fetch page: #{url.inspect}, error code: #{page.driver.status_code}")
         end
       rescue Capybara::Poltergeist::DeadClient, Capybara::Poltergeist::TimeoutError => e
+        # TODO: Handle Errno::EPIPE and Errno::ECONNRESET
         raise WebshotError.new("Capybara error: #{e.message.inspect}")
       end
     end
