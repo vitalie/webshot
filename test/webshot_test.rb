@@ -5,8 +5,8 @@ class WebshotTest < Test::Unit::TestCase
   DATA_DIR = File.expand_path(File.dirname(__FILE__) + "/data")
 
   def setup
-    Webshot.capybara_setup!
-    @webshot = Webshot::Screenshot.new
+    FileUtils.mkdir_p(DATA_DIR) unless File.directory?(DATA_DIR)
+    @webshot = Webshot::Screenshot.instance
   end
 
   def test_http

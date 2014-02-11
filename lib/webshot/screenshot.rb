@@ -1,8 +1,12 @@
+require "singleton"
+
 module Webshot
   class Screenshot
     include Capybara::DSL
+    include Singleton
 
     def initialize(opts = {})
+      Webshot.capybara_setup!
       width  = opts.fetch(:width, Webshot.width)
       height = opts.fetch(:height, Webshot.height)
       user_agent = opts.fetch(:user_agent, Webshot.user_agent)
@@ -12,6 +16,13 @@ module Webshot
       page.driver.headers = {
         "User-Agent" => user_agent,
       }
+    end
+
+    def start_session(&block)
+      Capybara.reset_sessions!
+      Capybara.current_session.instance_eval(&block) if block_given?
+      @session_started = true
+      self
     end
 
     # Captures a screenshot of +url+ saving it to +path+.
@@ -24,10 +35,14 @@ module Webshot
         quality = opts.fetch(:quality, 85)
 
         # Reset session before visiting url
-        Capybara.reset_sessions!
+        Capybara.reset_sessions! unless @session_started
+        @session_started = false
 
         # Open page
         visit url
+
+        # Timeout
+        sleep opts[:timeout] if opts[:timeout]
 
         # Check response code
         if page.driver.status_code == 200
