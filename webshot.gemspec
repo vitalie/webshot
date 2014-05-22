@@ -22,7 +22,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake"
 
   spec.add_dependency "activesupport"
-  spec.add_dependency "poltergeist", "~> 1.3.0"
-  spec.add_dependency "faye-websocket", "= 0.4.7"
-  spec.add_dependency "mini_magick", "~> 3.6.0"
+  spec.add_dependency "poltergeist", "~> 1.5.0"
+  spec.add_dependency "faye-websocket", "~> 0.7.3"
+  spec.add_dependency "mini_magick", "~> 3.7.0"
 end
