@@ -1,2 +1,4 @@
-require "webshot"
-require "test/unit"
+require 'rubygems'
+require 'webshot'
+require 'minitest/autorun'
+require 'minitest/unit'
