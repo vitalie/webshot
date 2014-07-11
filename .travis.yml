@@ -1,4 +1,5 @@
 language: ruby
+cache: bundler
 before_install:
   - gem install bundler
 rvm:
@@ -9,4 +10,5 @@ rvm:
   - rbx-2
 matrix:
   allow_failures:
-    - rbx-2
+    - rvm: rbx-2
+  fast_finish: true
