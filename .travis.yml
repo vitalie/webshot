@@ -1,7 +1,12 @@
 language: ruby
+before_install:
+  - gem install bundler
 rvm:
   - 2.1.1
   - 2.0.0
   - 1.9.3
   - jruby-19mode # JRuby in 1.9 mode
-  - rbx-2.1.1
+  - rbx-2
+matrix:
+  allow_failures:
+    - rbx-2
