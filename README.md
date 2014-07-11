@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/vitalie/webshot.svg?branch=master)](https://travis-ci.org/vitalie/webshot)
+
 # Webshot
 
 Captures a web page as a screenshot using Poltergeist, Capybara and PhantomJS.
