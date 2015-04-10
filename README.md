@@ -67,6 +67,30 @@ end.capture 'https://github.com/username/', 'github.png'
 
 ```
 
+## Scaling
+
+It's not recommended to start multiple PhantomJS concurrently.
+You should serialize requests, treat the process as unreliable and
+monitor it with daemontools, god, monit, etc.
+
+Recommended setup:
+
+     [S3] <-- [CloudFront + 404 handler] <-- User Request
+      ^
+      |
+    Worker <--> [Queue] <-- App
+
+
+The App triggers screenshot requests which are queued and
+then processed by a background worker (Resque, Sidkiq, etc),
+images should be uploaded to S3. The CloudFront should be
+configured to serve a default image with a low TTL
+(screenshot is not yet ready or couldn't be generated).
+
+Notes:
+  - sed 's/S3/Your file hosting service/g'
+  - sed 's/CloudFront/Your CDN service/g'
+
 ## Contributing
 
 1. Fork it
