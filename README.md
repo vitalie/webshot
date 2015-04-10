@@ -81,11 +81,12 @@ Recommended setup:
     Worker <--> [Queue] <-- App
 
 
-The App triggers screenshot requests which are queued and
-then processed by a background worker (Resque, Sidkiq, etc),
-images should be uploaded to S3. The CloudFront should be
-configured to serve a default image with a low TTL
-(screenshot is not yet ready or couldn't be generated).
+The application triggers screenshot requests which are queued and
+then processed by a background worker (Resque, Sidkiq, etc).
+The worker uploads the images to S3 which are served through
+CloudFront. The CDN should be configured to serve a default
+image (404 handler) with a low TTL to handle screenshot are not
+yet ready or couldn't be generated.
 
 Notes:
   - sed 's/S3/Your file hosting service/g'
