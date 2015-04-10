@@ -6,8 +6,10 @@ Captures a web page as a screenshot using Poltergeist, Capybara and PhantomJS.
 
 ## Installation
 
-Download and install [PhantomJS](http://phantomjs.org/) and then add PhantomJS to
-your PATH. Add this line to your application's Gemfile:
+Download and install [PhantomJS](http://phantomjs.org/),
+add the directory containing the binary to your PATH.
+
+Add the `webshot` gem to your Gemfile:
 
     gem "webshot"
 
