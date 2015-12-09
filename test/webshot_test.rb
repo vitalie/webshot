@@ -1,7 +1,6 @@
 require "test_helper"
 
 class WebshotTest < MiniTest::Unit::TestCase
-
   DATA_DIR = File.expand_path(File.dirname(__FILE__) + "/data")
 
   def setup
@@ -12,18 +11,18 @@ class WebshotTest < MiniTest::Unit::TestCase
   def test_http
     %w(www.yahoo.com).each do |name|
       output = thumb(name)
-      File.delete output if File.exists? output
+      File.delete output if File.exist? output
       @webshot.capture "http://#{name}/", output
-      assert File.exists? output
+      assert File.exist? output
     end
   end
 
   def test_https
     %w(github.com).each do |name|
       output = thumb(name)
-      File.delete output if File.exists? output
+      File.delete output if File.exist? output
       @webshot.capture "https://#{name}/", output
-      assert File.exists? output
+      assert File.exist? output
     end
   end
 
@@ -38,7 +37,7 @@ class WebshotTest < MiniTest::Unit::TestCase
   def test_mini_magick
     %w(www.yahoo.com).each do |name|
       output = thumb(name)
-      File.delete output if File.exists? output
+      File.delete output if File.exist? output
 
       # Customize MiniMagick options
       result = @webshot.capture("http://#{name}/", output) do |thumb|
@@ -46,8 +45,18 @@ class WebshotTest < MiniTest::Unit::TestCase
           c.thumbnail "100x90"
         end
       end
-      assert File.exists? output
+      assert File.exist? output
       assert result.respond_to? :to_blob
+    end
+  end
+
+  def test_allowed_404_status
+    %w(en.wikipedia.org/wiki/THIS_PAGE_DOES_NOT_EXIST).each do |name|
+      output = thumb('404_example')
+      File.delete output if File.exist? output
+
+      @webshot.capture "https://#{name}/", output, allowed_status_codes: [404]
+      assert File.exist? output
     end
   end
 
