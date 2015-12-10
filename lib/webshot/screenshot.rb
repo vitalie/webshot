@@ -14,7 +14,7 @@ module Webshot
       # Browser settings
       page.driver.resize(width, height)
       page.driver.headers = {
-        "User-Agent" => user_agent,
+        "User-Agent" => user_agent
       }
     end
 
@@ -25,6 +25,13 @@ module Webshot
       self
     end
 
+    def valid_status_code?(status_code, allowed_status_codes)
+      return true if status_code == 200
+      return true if status_code / 100 == 3
+      return true if allowed_status_codes.include?(status_code)
+      false
+    end
+
     # Captures a screenshot of +url+ saving it to +path+.
     def capture(url, path, opts = {})
       begin
@@ -33,6 +40,7 @@ module Webshot
         height  = opts.fetch(:height, 90)
         gravity = opts.fetch(:gravity, "north")
         quality = opts.fetch(:quality, 85)
+        allowed_status_codes = opts.fetch(:allowed_status_codes, [])
 
         # Reset session before visiting url
         Capybara.reset_sessions! unless @session_started
@@ -45,36 +53,37 @@ module Webshot
         sleep opts[:timeout] if opts[:timeout]
 
         # Check response code
-        if page.driver.status_code.to_i == 200 || page.driver.status_code.to_i / 100 == 3
-          tmp = Tempfile.new(["webshot", ".png"])
-          tmp.close
-          begin
-            # Save screenshot to file
-            page.driver.save_screenshot(tmp.path, :full => true)
+        status_code = page.driver.status_code.to_i
+        unless valid_status_code?(status_code, allowed_status_codes)
+          fail WebshotError, "Could not fetch page: #{url.inspect}, error code: #{page.driver.status_code}"
+        end
 
-            # Resize screenshot
-            thumb = MiniMagick::Image.open(tmp.path)
-            if block_given?
-              # Customize MiniMagick options
-              yield thumb
-            else
-              thumb.combine_options do |c|
-                c.thumbnail "#{width}x"
-                c.background "white"
-                c.extent "#{width}x#{height}"
-                c.gravity gravity
-                c.quality quality
-              end
+        tmp = Tempfile.new(["webshot", ".png"])
+        tmp.close
+        begin
+          # Save screenshot to file
+          page.driver.save_screenshot(tmp.path, :full => true)
+
+          # Resize screenshot
+          thumb = MiniMagick::Image.open(tmp.path)
+          if block_given?
+            # Customize MiniMagick options
+            yield thumb
+          else
+            thumb.combine_options do |c|
+              c.thumbnail "#{width}x"
+              c.background "white"
+              c.extent "#{width}x#{height}"
+              c.gravity gravity
+              c.quality quality
             end
-
-            # Save thumbnail
-            thumb.write path
-            thumb
-          ensure
-            tmp.unlink
           end
-        else
-          raise WebshotError.new("Could not fetch page: #{url.inspect}, error code: #{page.driver.status_code}")
+
+          # Save thumbnail
+          thumb.write path
+          thumb
+        ensure
+          tmp.unlink
         end
       rescue Capybara::Poltergeist::StatusFailError, Capybara::Poltergeist::BrowserError, Capybara::Poltergeist::DeadClient, Capybara::Poltergeist::TimeoutError, Errno::EPIPE => e
         # TODO: Handle Errno::EPIPE and Errno::ECONNRESET

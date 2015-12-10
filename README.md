@@ -36,6 +36,10 @@ ws.capture "http://www.google.com/", "google.png", width: 100, height: 90, quali
 # Specify only width, height will be computed according to page's height
 ws.capture "http://www.google.com/", "google.png", width: 1024
 
+# Specify an array of additional HTTP status codes to accept,
+# beyond normal success codes like 200 or 302
+ws.capture "http://www.google.com/foo", "google_404.png", allowed_status_codes: [404]
+
 # Customize thumbnail generation (MiniMagick)
 # see: https://github.com/minimagick/minimagick
 ws.capture("http://www.google.com/", "google.png") do |magick|
