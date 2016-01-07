@@ -40,6 +40,7 @@ module Webshot
         height  = opts.fetch(:height, 90)
         gravity = opts.fetch(:gravity, "north")
         quality = opts.fetch(:quality, 85)
+        full = opts.fetch(:full, true)
         allowed_status_codes = opts.fetch(:allowed_status_codes, [])
 
         # Reset session before visiting url
@@ -62,7 +63,7 @@ module Webshot
         tmp.close
         begin
           # Save screenshot to file
-          page.driver.save_screenshot(tmp.path, :full => true)
+          page.driver.save_screenshot(tmp.path, :full => full)
 
           # Resize screenshot
           thumb = MiniMagick::Image.open(tmp.path)
