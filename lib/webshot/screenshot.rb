@@ -64,7 +64,7 @@ module Webshot
         tmp.close
         begin
           screenshot_opts = { full: full }
-          screenshot_opts.merge({ selector: selector }) if selector
+          screenshot_opts = screenshot_opts.merge({ selector: selector }) if selector
 
           # Save screenshot to file
           page.driver.save_screenshot(tmp.path, screenshot_opts)
