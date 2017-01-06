@@ -1,6 +1,6 @@
 require "test_helper"
 
-class WebshotTest < MiniTest::Unit::TestCase
+class WebshotTest < Minitest::Test
   DATA_DIR = File.expand_path(File.dirname(__FILE__) + "/data")
 
   def setup
