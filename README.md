@@ -89,7 +89,7 @@ Recommended setup:
 
 
 The application triggers screenshot requests which are queued and
-then processed by a background worker (Resque, Sidkiq, etc).
+then processed by a background worker ([Resque](https://github.com/resque/resque), [Sidekiq](https://github.com/mperham/sidekiq), etc).
 The worker uploads the images to S3 which are served through
 CloudFront. The CDN should be configured to serve a default
 image (404 handler) with a low TTL to handle screenshot are not
