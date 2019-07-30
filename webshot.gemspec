@@ -21,6 +21,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake"
   spec.add_development_dependency "minitest"
   spec.add_development_dependency "gem-release"
+  spec.add_development_dependency "bump"
 
   spec.add_dependency "activesupport"
   spec.add_dependency "poltergeist", [">= 1.12.0", "<= 1.18.1"]
