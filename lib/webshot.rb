@@ -27,7 +27,7 @@ module Webshot
     yield self
   end
 
-  # Capibara setup
+  # Capybara setup
   def self.capybara_setup!
     # By default Capybara will try to boot a rack application
     # automatically. You might want to switch off Capybara's
