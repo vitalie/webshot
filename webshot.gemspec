@@ -18,10 +18,10 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
-  spec.add_development_dependency "rake"
-  spec.add_development_dependency "minitest"
-  spec.add_development_dependency "gem-release"
-  spec.add_development_dependency "bump"
+  spec.add_development_dependency "rake", "~> 13"
+  spec.add_development_dependency "minitest", "~> 5.14"
+  spec.add_development_dependency "gem-release", "~> 2.1"
+  spec.add_development_dependency "bump", "~> 0.9"
 
   spec.add_dependency "activesupport"
   spec.add_dependency "poltergeist", [">= 1.12.0", "<= 1.18.1"]
