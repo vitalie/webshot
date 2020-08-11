@@ -23,7 +23,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "gem-release", "~> 2.1"
   spec.add_development_dependency "bump", "~> 0.9"
 
-  spec.add_dependency "activesupport"
+  spec.add_dependency "activesupport", "~> 5"
   spec.add_dependency "poltergeist", [">= 1.12.0", "<= 1.18.1"]
   spec.add_dependency "faye-websocket", "~> 0.11.0"
   spec.add_dependency "mini_magick", "~> 4.9"
