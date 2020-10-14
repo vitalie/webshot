@@ -63,8 +63,7 @@ module Webshot
         tmp = Tempfile.new(["webshot", ".png"])
         tmp.close
         begin
-          screenshot_opts = { full: full }
-          screenshot_opts = screenshot_opts.merge({ selector: selector }) if selector
+          screenshot_opts = selector ? { selector: selector } : { full: full }
 
           # Save screenshot to file
           page.driver.save_screenshot(tmp.path, screenshot_opts)
