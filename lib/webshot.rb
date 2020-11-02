@@ -22,6 +22,10 @@ module Webshot
   mattr_accessor :user_agent
   @@user_agent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.43 Safari/537.31"
 
+  # Driver options
+  mattr_accessor :driver_options
+  @@driver_options = {}
+
   # Customize settings
   def self.setup
     yield self
@@ -38,8 +42,9 @@ module Webshot
         # Raise JavaScript errors to Ruby
         js_errors: false,
         # Additional command line options for PhantomJS
-        phantomjs_options: ['--ignore-ssl-errors=yes', '--ssl-protocol=any']
-      })
+        phantomjs_options: ['--ignore-ssl-errors=yes', '--ssl-protocol=any'],
+        window_size: [width, height]
+      }.merge(driver_options))
     end
     Capybara.current_driver = :poltergeist
   end
